@@ -1,7 +1,7 @@
-import 'package:media_picker/data/models/asset.dart';
+import 'package:media_picker/data/models/media.dart';
 
 class MediaDatabase {
-  static List<Asset> data = [];
+  static List<Media> data = [];
 
   static Future<void> read() async {}
 }
