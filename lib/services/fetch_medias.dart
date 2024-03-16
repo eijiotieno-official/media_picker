@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:media_picker/data/models/media.dart';
+import 'package:media_picker/models/media.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 import 'package:transparent_image/transparent_image.dart';
