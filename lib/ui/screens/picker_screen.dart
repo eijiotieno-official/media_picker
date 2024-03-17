@@ -32,8 +32,7 @@ class _PickerScreenState extends State<PickerScreen> {
   List<AssetPathEntity> _albums = [];
   Future<void> _loadAlbums() async {
     await fetchAlbums().then(
-      (value) {
-        
+      (value) {  
         if (value.isNotEmpty) {
           setState(() {
             _currentAlbum = value.first;
@@ -56,10 +55,12 @@ class _PickerScreenState extends State<PickerScreen> {
     return Scaffold(
       appBar: AppBar(
         title: DropdownButton<AssetPathEntity>(
+          borderRadius: BorderRadius.circular(16.0),
           value: _currentAlbum,
           items: _albums
               .map(
                 (e) => DropdownMenuItem<AssetPathEntity>(
+                  value: e,
                   child: Text(
                     e.name,
                   ),
