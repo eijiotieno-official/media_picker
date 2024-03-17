@@ -5,12 +5,12 @@ import 'package:media_picker/ui/components/media_item.dart';
 class MediasGridView extends StatelessWidget {
   final List<Media> medias;
   final List<Media> selectedMedias;
-  final VoidCallback select;
+  final VoidCallback selectEntity;
   const MediasGridView({
     super.key,
     required this.medias,
     required this.selectedMedias,
-    required this.select,
+    required this.selectEntity,
   });
 
   @override
@@ -27,7 +27,7 @@ class MediasGridView extends StatelessWidget {
         media: medias[index],
         isSelected: selectedMedias.any((element) =>
             element.assetEntity.id == medias[index].assetEntity.id),
-        select: select,
+        selectEntity: selectEntity,
       ),
     );
   }
