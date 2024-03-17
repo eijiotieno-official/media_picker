@@ -25,8 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text("Media Picker"),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          List<AssetEntity>? result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) {
@@ -34,6 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           );
+          if (result != null) {
+            _updateSelectedEntities(result);
+          }
         },
         child: const Icon(Icons.image_rounded),
       ),
