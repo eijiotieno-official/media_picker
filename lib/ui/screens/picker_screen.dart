@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:media_picker/models/media.dart';
 import 'package:media_picker/services/fetch_albums.dart';
+import 'package:media_picker/services/fetch_medias.dart';
 import 'package:media_picker/ui/components/medias_grid_view.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -23,22 +24,48 @@ class _PickerScreenState extends State<PickerScreen> {
             _currentAlbum = value.first;
             _albums = value;
           });
+          _loadMedias();
         }
       },
     );
   }
 
   final ScrollController _scrollController = ScrollController();
+
   final List<Media> _medias = [];
-  int _page = 0;
+  int _lastPage = 0;
+  int _currentPage = 0;
+
+  Future<void> _loadMedias() async {
+    _lastPage = _currentPage;
+    if (_currentAlbum != null) {
+      await fetchMedias(album: _currentAlbum!, page: _currentPage).then(
+        (value) {
+          setState(() {
+            _medias.addAll(value);
+          });
+        },
+      );
+    }
+  }
 
   @override
   void initState() {
     _selectedMedias.addAll(widget.selectedMedias);
     _loadAlbums();
+
     super.initState();
+
     _scrollController.addListener(
-      () {},
+      () {
+        if (_scrollController.position.pixels /
+                _scrollController.position.maxScrollExtent >
+            0.33) {
+          if (_currentPage != _lastPage) {
+            _loadMedias();
+          }
+        }
+      },
     );
   }
 
@@ -72,7 +99,7 @@ class _PickerScreenState extends State<PickerScreen> {
                 (e) => DropdownMenuItem<AssetPathEntity>(
                   value: e,
                   child: Text(
-                    e.name,
+                    e.name.isEmpty ? "0" : e.name,
                   ),
                 ),
               )
@@ -80,7 +107,11 @@ class _PickerScreenState extends State<PickerScreen> {
           onChanged: (AssetPathEntity? value) {
             setState(() {
               _currentAlbum = value;
+              _currentPage = 0;
+              _lastPage = 0;
+              _medias.clear();
             });
+            _loadMedias();
             _scrollController.jumpTo(0.0);
           },
         ),

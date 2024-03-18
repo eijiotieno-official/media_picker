@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:media_picker/models/media.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -19,7 +20,18 @@ class MediaItem extends StatelessWidget {
       onTap: () => selectMedia(media),
       child: Stack(
         children: [
-          media.widget,
+          Positioned.fill(
+            child: Padding(
+              padding: EdgeInsets.all(isSelected ? 10.0 : 0.0),
+              child: media.widget,
+            ),
+          ),
+          if (media.assetEntity.type == AssetType.video && !isSelected)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withOpacity(0.1),
+              ),
+            ),
           if (media.assetEntity.type == AssetType.video)
             const Positioned.fill(
               child: Align(
@@ -28,6 +40,7 @@ class MediaItem extends StatelessWidget {
                   padding: EdgeInsets.all(8.0),
                   child: Icon(
                     Icons.play_arrow_rounded,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -38,21 +51,22 @@ class MediaItem extends StatelessWidget {
     );
   }
 
-  Widget _buildIsSelected() => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Container(
-                color: Colors.black.withOpacity(0.3),
+  Widget _buildIsSelected() => Stack(
+    children: [
+      Positioned.fill(
+            child: Container(
+              color: Colors.black.withOpacity(0.1),
+            ),
+          ),
+      const Positioned.fill(
+            child: Center(
+              child: Icon(
+                Icons.check_circle_rounded,
+                color: Colors.white,
+                size: 30,
               ),
             ),
-            const Positioned.fill(
-              child: Center(
-                child: Icon(Icons.check_rounded),
-              ),
-            ),
-          ],
-        ),
-      );
+          ),
+    ],
+  );
 }

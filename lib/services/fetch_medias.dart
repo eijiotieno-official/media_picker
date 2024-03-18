@@ -18,6 +18,7 @@ Future<List<Media>> fetchMedias({
       assetEntity: entity,
       widget: FadeInImage(
         placeholder: MemoryImage(kTransparentImage),
+        fit: BoxFit.cover,
         image: AssetEntityImageProvider(
           entity,
           thumbnailSize: const ThumbnailSize.square(500),

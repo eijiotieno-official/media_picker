@@ -24,6 +24,19 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text("Media Picker"),
       ),
+      body: ListView.builder(
+        itemCount: _selectedMedias.length,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8.0,
+              vertical: 4.0,
+            ),
+            child: _selectedMedias[index].widget,
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           List<Media>? result = await Navigator.push(
@@ -35,6 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
           if (result != null) {
+            setState(() {
+              _selectedMedias.clear();
+            });
             _updateSelectedMedias(result);
           }
         },
