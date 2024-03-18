@@ -5,17 +5,20 @@ import 'package:media_picker/ui/components/media_item.dart';
 class MediasGridView extends StatelessWidget {
   final List<Media> medias;
   final List<Media> selectedMedias;
-  final VoidCallback selectEntity;
+  final Function selectMedia;
+  final ScrollController scrollController;
   const MediasGridView({
     super.key,
     required this.medias,
     required this.selectedMedias,
-    required this.selectEntity,
+    required this.selectMedia,
+    required this.scrollController,
   });
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+      controller: scrollController,
       physics: const BouncingScrollPhysics(),
       itemCount: medias.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -27,7 +30,7 @@ class MediasGridView extends StatelessWidget {
         media: medias[index],
         isSelected: selectedMedias.any((element) =>
             element.assetEntity.id == medias[index].assetEntity.id),
-        selectEntity: selectEntity,
+        selectMedia: selectMedia,
       ),
     );
   }

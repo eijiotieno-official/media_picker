@@ -5,18 +5,18 @@ import 'package:photo_manager/photo_manager.dart';
 class MediaItem extends StatelessWidget {
   final Media media;
   final bool isSelected;
-  final Function selectEntity;
+  final Function selectMedia;
   const MediaItem({
     super.key,
     required this.media,
     required this.isSelected,
-    required this.selectEntity,
+    required this.selectMedia,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => selectEntity(media.assetEntity),
+      onTap: () => selectMedia(media),
       child: Stack(
         children: [
           media.widget,

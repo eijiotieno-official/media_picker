@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:media_picker/models/media.dart';
 import 'package:media_picker/ui/screens/picker_screen.dart';
-import 'package:photo_manager/photo_manager.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,11 +10,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<AssetEntity> _selectedEntities = [];
+  final List<Media> _selectedMedias = [];
 
-  void _updateSelectedEntities(List<AssetEntity> entities) {
+  void _updateSelectedMedias(List<Media> entities) {
     setState(() {
-      _selectedEntities.addAll(entities);
+      _selectedMedias.addAll(entities);
     });
   }
 
@@ -26,16 +26,16 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          List<AssetEntity>? result = await Navigator.push(
+          List<Media>? result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) {
-                return PickerScreen(selectedEntities: _selectedEntities);
+                return PickerScreen(selectedMedias: _selectedMedias);
               },
             ),
           );
           if (result != null) {
-            _updateSelectedEntities(result);
+            _updateSelectedMedias(result);
           }
         },
         child: const Icon(Icons.image_rounded),
