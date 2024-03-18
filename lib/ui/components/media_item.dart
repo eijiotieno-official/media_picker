@@ -1,72 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:media_picker/models/media.dart';
-import 'package:photo_manager/photo_manager.dart';
 
+// Widget to display a media item with optional selection overlay
 class MediaItem extends StatelessWidget {
-  final Media media;
-  final bool isSelected;
-  final Function selectMedia;
+  final Media media; // The media to display
+  final bool isSelected; // Indicates whether the media is selected
+  final Function selectMedia; // Callback function when the media is tapped
+
   const MediaItem({
-    super.key,
-    required this.media,
-    required this.isSelected,
-    required this.selectMedia,
-  });
+    required this.media, // The media to display
+    required this.isSelected, // Indicates whether the media is selected
+    required this.selectMedia, // Callback function when the media is tapped
+    super.key, // Unique identifier for the widget
+  }); // Passes the key to the super constructor
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => selectMedia(media),
+      onTap: () =>
+          selectMedia(media), // Callback function when the media is tapped
       child: Stack(
         children: [
-          Positioned.fill(
-            child: Padding(
-              padding: EdgeInsets.all(isSelected ? 10.0 : 0.0),
-              child: media.widget,
-            ),
-          ),
-          if (media.assetEntity.type == AssetType.video && !isSelected)
-            Positioned.fill(
-              child: Container(
-                color: Colors.black.withOpacity(0.1),
-              ),
-            ),
-          if (media.assetEntity.type == AssetType.video)
-            const Positioned.fill(
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.play_arrow_rounded,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          if (isSelected) _buildIsSelected(),
+          _buildMediaWidget(), // Display the media widget with optional padding
+          if (isSelected)
+            _buildIsSelectedOverlay(), // Display the selected overlay if the media is selected
         ],
       ),
     );
   }
 
-  Widget _buildIsSelected() => Stack(
-    children: [
-      Positioned.fill(
-            child: Container(
-              color: Colors.black.withOpacity(0.1),
-            ),
+  // Build the media widget with optional padding
+  Widget _buildMediaWidget() {
+    return Positioned.fill(
+      child: Padding(
+        padding: EdgeInsets.all(
+            isSelected ? 10.0 : 0.0), // Apply padding if the media is selected
+        child: media.widget, // Display the media widget
+      ),
+    );
+  }
+
+  // Build the selected overlay
+  Widget _buildIsSelectedOverlay() {
+    return Positioned.fill(
+      child: Container(
+        color: Colors.black.withOpacity(0.1), // Semi-transparent black overlay
+        child: const Center(
+          child: Icon(
+            Icons.check_circle_rounded, // Checkmark icon
+            color: Colors.white, // White color for the icon
+            size: 30, // Size of the icon
           ),
-      const Positioned.fill(
-            child: Center(
-              child: Icon(
-                Icons.check_circle_rounded,
-                color: Colors.white,
-                size: 30,
-              ),
-            ),
-          ),
-    ],
-  );
+        ),
+      ),
+    );
+  }
 }
