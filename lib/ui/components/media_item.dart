@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:media_picker/models/media.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 // Widget to display a media item with optional selection overlay
 class MediaItem extends StatelessWidget {
@@ -22,6 +23,24 @@ class MediaItem extends StatelessWidget {
       child: Stack(
         children: [
           _buildMediaWidget(), // Display the media widget with optional padding
+          Positioned.fill(
+            child: Container(
+              color: Colors.black
+                  .withOpacity(0.15), // Semi-transparent black overlay
+              child: media.assetEntity.type == AssetType.video
+                  ? const Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.play_arrow_rounded, // Checkmark icon
+                          color: Colors.white, // White color for the icon
+                        ),
+                      ),
+                    )
+                  : null,
+            ),
+          ),
           if (isSelected)
             _buildIsSelectedOverlay(), // Display the selected overlay if the media is selected
         ],
