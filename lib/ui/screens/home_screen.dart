@@ -4,11 +4,10 @@ import 'package:media_picker/ui/screens/picker_screen.dart';
 
 // Home screen widget
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key}); // Constructor with optional key parameter
-
+  const HomeScreen({super.key});
   @override
   State<HomeScreen> createState() =>
-      _HomeScreenState(); // Create state for the home screen
+      _HomeScreenState();
 }
 
 // State class for the home screen

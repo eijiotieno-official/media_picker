@@ -8,7 +8,6 @@ import 'package:photo_manager/photo_manager.dart';
 class PickerScreen extends StatefulWidget {
   final List<Media> selectedMedias;
 
-  // Constructor for PickerScreen widget
   const PickerScreen({super.key, required this.selectedMedias});
 
   @override
