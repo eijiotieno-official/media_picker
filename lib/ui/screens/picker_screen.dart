@@ -15,56 +15,63 @@ class PickerScreen extends StatefulWidget {
 }
 
 class _PickerScreenState extends State<PickerScreen> {
+  // ScrollController for handling scrolling behavior
+  final ScrollController _scrollController = ScrollController();
   AssetPathEntity? _currentAlbum;
   List<AssetPathEntity> _albums = [];
-  final ScrollController _scrollController =
-      ScrollController(); // ScrollController for handling scrolling behavior
   final List<Media> _medias = [];
   int _lastPage = 0;
   int _currentPage = 0;
-  final List<Media> _selectedMedias = []; // List to store selected media items
+  // List to store selected media items
+  final List<Media> _selectedMedias = [];
 
   @override
   void initState() {
     super.initState();
-    _selectedMedias
-        .addAll(widget.selectedMedias); // Add initially selected media items
-    _loadAlbums(); // Load albums when the screen initializes
-    _scrollController.addListener(
-        _loadMoreMedias); // Add listener to scroll controller for loading more media items
+    // Add initially selected media items
+    _selectedMedias.addAll(widget.selectedMedias);
+    // Load albums when the screen initializes
+    _loadAlbums();
+    // Add listener to scroll controller for loading more media items
+    _scrollController.addListener(_loadMoreMedias);
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(
-        _loadMoreMedias); // Remove listener to avoid memory leaks
-    _scrollController.dispose(); // Dispose scroll controller
+    // Remove listener to avoid memory leaks
+    _scrollController.removeListener(_loadMoreMedias);
+    // Dispose scroll controller
+    _scrollController.dispose();
     super.dispose();
   }
 
   // Method to load albums asynchronously
   void _loadAlbums() async {
-    List<AssetPathEntity> albums =
-        await fetchAlbums(); // Fetch albums from service
+    // Fetch albums from service
+    List<AssetPathEntity> albums = await fetchAlbums();
     if (albums.isNotEmpty) {
       setState(() {
-        _currentAlbum =
-            albums.first; // Set the first album as the current album
-        _albums = albums; // Update the list of albums
+        // Set the first album as the current album
+        _currentAlbum = albums.first;
+        // Update the list of albums
+        _albums = albums;
       });
-      _loadMedias(); // Load media items for the current album
+      // Load media items for the current album
+      _loadMedias();
     }
   }
 
   // Method to load media items asynchronously
   void _loadMedias() async {
-    _lastPage = _currentPage; // Store the current page as the last page
+    // Store the current page as the last page
+    _lastPage = _currentPage;
     if (_currentAlbum != null) {
-      List<Media> medias = await fetchMedias(
-          album: _currentAlbum!,
-          page: _currentPage); // Fetch media items for the current album
+      // Fetch media items for the current album
+      List<Media> medias =
+          await fetchMedias(album: _currentAlbum!, page: _currentPage);
       setState(() {
-        _medias.addAll(medias); // Add fetched media items to the list
+        // Add fetched media items to the list
+        _medias.addAll(medias);
       });
     }
   }
@@ -76,7 +83,8 @@ class _PickerScreenState extends State<PickerScreen> {
         0.33) {
       // Check if scrolled beyond 33% of the scroll extent
       if (_currentPage != _lastPage) {
-        _loadMedias(); // Load more media items
+        // Load more media items
+        _loadMedias();
       }
     }
   }
@@ -88,13 +96,12 @@ class _PickerScreenState extends State<PickerScreen> {
         media.assetEntity.id); // Check if the media item is already selected
     setState(() {
       if (isSelected) {
-        _selectedMedias.removeWhere((element) =>
-            element.assetEntity.id ==
-            media
-                .assetEntity.id); // Deselect the media item if already selected
+        // Deselect the media item if already selected
+        _selectedMedias.removeWhere(
+            (element) => element.assetEntity.id == media.assetEntity.id);
       } else {
-        _selectedMedias
-            .add(media); // Select the media item if not already selected
+        // Select the media item if not already selected
+        _selectedMedias.add(media);
       }
     });
   }
@@ -110,40 +117,46 @@ class _PickerScreenState extends State<PickerScreen> {
               .map(
                 (e) => DropdownMenuItem<AssetPathEntity>(
                   value: e,
-                  child: Text(e.name.isEmpty
-                      ? "0"
-                      : e.name), // Display album name in dropdown
+                  // Display album name in dropdown
+                  child: Text(e.name.isEmpty ? "0" : e.name),
                 ),
               )
               .toList(),
           onChanged: (AssetPathEntity? value) {
             setState(() {
-              _currentAlbum =
-                  value; // Set the selected album as the current album
-              _currentPage = 0; // Reset current page to load from the beginning
-              _lastPage = 0; // Reset last page
-              _medias.clear(); // Clear existing media items
+              // Set the selected album as the current album
+              _currentAlbum = value;
+              // Reset current page to load from the beginning
+              _currentPage = 0;
+              // Reset last page
+              _lastPage = 0;
+              // Clear existing media items
+              _medias.clear();
             });
-            _loadMedias(); // Load media items for the selected album
-            _scrollController.jumpTo(0.0); // Scroll to the top
+            // Load media items for the selected album
+            _loadMedias();
+            // Scroll to the top
+            _scrollController.jumpTo(0.0);
           },
         ),
       ),
       body: MediasGridView(
-        medias: _medias, // Pass the list of media items to the grid view
-        selectedMedias:
-            _selectedMedias, // Pass the list of selected media items to the grid view
-        selectMedia:
-            _selectMedia, // Pass the method to select or deselect a media item
-        scrollController:
-            _scrollController, // Pass the scroll controller to the grid view
+        // Pass the list of media items to the grid view
+        medias: _medias,
+        // Pass the list of selected media items to the grid view
+        selectedMedias: _selectedMedias,
+        // Pass the method to select or deselect a media item
+        selectMedia: _selectMedia,
+        // Pass the scroll controller to the grid view
+        scrollController: _scrollController,
       ),
       floatingActionButton: _selectedMedias.isEmpty
           ? null
           : FloatingActionButton(
-              onPressed: () => Navigator.pop(context,
-                  _selectedMedias), // Close the screen and pass selected media items back
-              child: const Icon(Icons.check_rounded), // Display check icon
+              // Close the screen and pass selected media items back
+              onPressed: () => Navigator.pop(context, _selectedMedias),
+              // Display check icon
+              child: const Icon(Icons.check_rounded),
             ),
     );
   }
