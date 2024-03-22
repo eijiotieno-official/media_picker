@@ -4,41 +4,56 @@ import 'package:media_picker/ui/components/media_item.dart';
 
 // Widget to display a grid of media items
 class MediasGridView extends StatelessWidget {
-  final List<Media> medias; // List of all media items
-  final List<Media> selectedMedias; // List of selected media items
-  final Function(Media) selectMedia; // Callback function to select a media item
-  final ScrollController scrollController; // Controller for scrolling
+  // List of all media items
+  final List<Media> medias;
+  // List of selected media items
+  final List<Media> selectedMedias;
+  // Callback function to select a media item
+  final Function(Media) selectMedia;
+  // Controller for scrolling
+  final ScrollController scrollController;
 
   const MediasGridView({
-    super.key, // Unique identifier for the widget
-    required this.medias, // List of all media items
-    required this.selectedMedias, // List of selected media items
-    required this.selectMedia, // Callback function to select a media item
-    required this.scrollController, // Controller for scrolling
-  }); // Passes the key to the super constructor
+    // Unique identifier for the widget
+    super.key,
+    // List of all media items
+    required this.medias,
+    // List of selected media items
+    required this.selectedMedias,
+    // Callback function to select a media item
+    required this.selectMedia,
+    // Controller for scrolling
+    required this.scrollController,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3.0),
       child: GridView.builder(
-        controller: scrollController, // Assign the provided scroll controller
-        physics: const BouncingScrollPhysics(), // Apply bouncing scroll physics
-        itemCount: medias.length, // Set the number of items in the grid
+        // Assign the provided scroll controller
+        controller: scrollController,
+        // Apply bouncing scroll physics
+        physics: const BouncingScrollPhysics(),
+        // Set the number of items in the grid
+        itemCount: medias.length,
+        // 3 columns in the grid
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, // 3 columns in the grid
-          mainAxisSpacing: 3, // Spacing between rows
-          crossAxisSpacing: 3, // Spacing between columns
+          crossAxisCount: 3,
+          // Spacing between rows
+          mainAxisSpacing: 3,
+          // Spacing between columns
+          crossAxisSpacing: 3,
         ),
+        // Build each media item using the MediaItem widget
         itemBuilder: (context, index) => MediaItem(
-          // Build each media item using the MediaItem widget
-          media: medias[index], // Pass the current media item
+          // Pass the current media item
+          media: medias[index],
+          // Check if the media item is selected
           isSelected: selectedMedias.any((element) =>
-              element.assetEntity.id ==
-              medias[index]
-                  .assetEntity
-                  .id), // Check if the media item is selected
-          selectMedia: selectMedia, // Pass the selectMedia callback function
+              element.assetEntity.id == medias[index].assetEntity.id),
+          // Pass the selectMedia callback function
+          selectMedia: selectMedia,
         ),
       ),
     );

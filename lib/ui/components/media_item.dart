@@ -4,45 +4,52 @@ import 'package:photo_manager/photo_manager.dart';
 
 // Widget to display a media item with optional selection overlay
 class MediaItem extends StatelessWidget {
-  final Media media; // The media to display
-  final bool isSelected; // Indicates whether the media is selected
-  final Function selectMedia; // Callback function when the media is tapped
+  // The media to display
+  final Media media;
+  // Indicates whether the media is selected
+  final bool isSelected;
+  // Callback function when the media is tapped
+  final Function selectMedia;
 
+  // Unique identifier for the widget, passes the key to the super constructor
   const MediaItem({
-    required this.media, // The media to display
-    required this.isSelected, // Indicates whether the media is selected
-    required this.selectMedia, // Callback function when the media is tapped
-    super.key, // Unique identifier for the widget
-  }); // Passes the key to the super constructor
+    required this.media,
+    required this.isSelected,
+    required this.selectMedia,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () =>
-          selectMedia(media), // Callback function when the media is tapped
+      // Callback function when the media is tapped
+      onTap: () => selectMedia(media),
       child: Stack(
         children: [
-          _buildMediaWidget(), // Display the media widget with optional padding
+          // Display the media widget with optional padding
+          _buildMediaWidget(),
           Positioned.fill(
             child: Container(
-              color: Colors.black
-                  .withOpacity(0.15), // Semi-transparent black overlay
+              // Semi-transparent black overlay
+              color: Colors.black.withOpacity(0.15),
               child: media.assetEntity.type == AssetType.video
                   ? const Align(
                       alignment: Alignment.bottomRight,
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Icon(
-                          Icons.play_arrow_rounded, // Checkmark icon
-                          color: Colors.white, // White color for the icon
+                          // Checkmark icon
+                          Icons.play_arrow_rounded,
+                          // White color for the icon
+                          color: Colors.white,
                         ),
                       ),
                     )
                   : null,
             ),
           ),
-          if (isSelected)
-            _buildIsSelectedOverlay(), // Display the selected overlay if the media is selected
+          // Display the selected overlay if the media is selected
+          if (isSelected) _buildIsSelectedOverlay(),
         ],
       ),
     );
@@ -52,9 +59,9 @@ class MediaItem extends StatelessWidget {
   Widget _buildMediaWidget() {
     return Positioned.fill(
       child: Padding(
-        padding: EdgeInsets.all(
-            isSelected ? 10.0 : 0.0), // Apply padding if the media is selected
-        child: media.widget, // Display the media widget
+        padding: EdgeInsets.all(isSelected ? 10.0 : 0.0),
+        // Display the media widget
+        child: media.widget,
       ),
     );
   }
@@ -63,12 +70,16 @@ class MediaItem extends StatelessWidget {
   Widget _buildIsSelectedOverlay() {
     return Positioned.fill(
       child: Container(
-        color: Colors.black.withOpacity(0.1), // Semi-transparent black overlay
+        // Semi-transparent black overlay
+        color: Colors.black.withOpacity(0.1),
         child: const Center(
           child: Icon(
-            Icons.check_circle_rounded, // Checkmark icon
-            color: Colors.white, // White color for the icon
-            size: 30, // Size of the icon
+            // Checkmark icon
+            Icons.check_circle_rounded,
+            // White color for the icon
+            color: Colors.white,
+            // Size of the icon
+            size: 30,
           ),
         ),
       ),

@@ -18,26 +18,33 @@ Future<List<Media>> fetchMedias({
 
     // Loop through each asset entity and create corresponding Media objects
     for (AssetEntity entity in entities) {
+      // Assign the asset entity to the Media object
       Media media = Media(
-        assetEntity: entity, // Assign the asset entity to the Media object
+        assetEntity: entity,
         // Create a FadeInImage widget to display the media thumbnail
         widget: FadeInImage(
-          placeholder: MemoryImage(kTransparentImage), // Placeholder image
-          fit: BoxFit.cover, // Set the fit mode to cover
+          // Placeholder image
+          placeholder: MemoryImage(kTransparentImage),
+          // Set the fit mode to cover
+          fit: BoxFit.cover,
           // Use AssetEntityImageProvider to load the media thumbnail
           image: AssetEntityImageProvider(
             entity,
-            thumbnailSize: const ThumbnailSize.square(500), // Thumbnail size
-            isOriginal: false, // Load a non-original (thumbnail) image
+            // Thumbnail size
+            thumbnailSize: const ThumbnailSize.square(500),
+            // Load a non-original (thumbnail) image
+            isOriginal: false,
           ),
         ),
       );
-      medias.add(media); // Add the created Media object to the list
+      // Add the created Media object to the list
+      medias.add(media);
     }
   } catch (e) {
     // Handle any exceptions that occur during fetching
     debugPrint('Error fetching media: $e');
   }
 
-  return medias; // Return the list of fetched media items
+  // Return the list of fetched media items
+  return medias;
 }

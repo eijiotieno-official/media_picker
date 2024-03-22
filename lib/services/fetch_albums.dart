@@ -15,6 +15,7 @@ Future<List<AssetPathEntity>> fetchAlbums() async {
   } catch (e) {
     // Handle any exceptions that occur during album fetching
     debugPrint('Error fetching albums: $e');
-    return []; // Return an empty list if an error occurs
+    // Return an empty list if an error occurs
+    return [];
   }
 }
