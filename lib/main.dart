@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:media_picker/ui/screens/home_screen.dart';
 
 // Entry point of the application
 void main() {
@@ -10,6 +11,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp();
+    return const MaterialApp(
+      home: HomeScreen(),
+    );
   }
 }
