@@ -8,7 +8,9 @@ class Media {
   // Represents a Flutter widget associated with the asset
   final Widget widget;
   Media({
+    // Initialize with a required AssetEntity
     required this.assetEntity,
+    // Initialize with a required Widget
     required this.widget,
   });
 }

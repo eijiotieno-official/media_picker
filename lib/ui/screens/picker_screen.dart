@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:media_picker/models/media.dart';
 import 'package:media_picker/services/fetch_albums.dart';
 import 'package:media_picker/services/fetch_medias.dart';
-import 'package:media_picker/ui/components/media_grid_view.dart';
+import 'package:media_picker/ui/components/medias_grid_view.dart';
 import 'package:photo_manager/photo_manager.dart';
-
-import '../../models/media.dart';
 
 class PickerScreen extends StatefulWidget {
   final List<Media> selectedMedias;
+
   const PickerScreen({super.key, required this.selectedMedias});
 
   @override
@@ -15,70 +15,25 @@ class PickerScreen extends StatefulWidget {
 }
 
 class _PickerScreenState extends State<PickerScreen> {
-  // List to store selected media items
-  final List<Media> _selectedMedias = [];
-
+  // ScrollController for handling scrolling behavior
+  final ScrollController _scrollController = ScrollController();
   AssetPathEntity? _currentAlbum;
   List<AssetPathEntity> _albums = [];
-  // Method to load albums asynchronosly
-  void _loadAlbums() async {
-    // Fetch albums from service
-    List<AssetPathEntity> albums = await fetchAlbums();
-    if (albums.isNotEmpty) {
-      setState(() {
-        // Set the first album as the current album
-        _currentAlbum = albums.first;
-        //Update the list of albums
-        _albums = albums;
-      });
-
-      // Load media items for the current album
-      _loadMedias();
-    }
-  }
-
   final List<Media> _medias = [];
   int _lastPage = 0;
   int _currentPage = 0;
-  // Method to load media items asynchronously
-  void _loadMedias() async {
-    // Store the current page as the last page
-    _lastPage = _currentPage;
-    if (_currentAlbum != null) {
-      // Fetch media items for the current album
-      List<Media> medias =
-          await fetchMedias(album: _currentAlbum!, page: _currentPage);
-
-      setState(() {
-        // Add fetched media items to the list
-        _medias.addAll(medias);
-      });
-    }
-  }
+  // List to store selected media items
+  final List<Media> _selectedMedias = [];
 
   @override
   void initState() {
+    super.initState();
     // Add initially selected media items
     _selectedMedias.addAll(widget.selectedMedias);
     // Load albums when the screen initializes
     _loadAlbums();
-    super.initState();
     // Add listener to scroll controller for loading more media items
     _scrollController.addListener(_loadMoreMedias);
-  }
-
-  final ScrollController _scrollController = ScrollController();
-
-  // Method to load more media items when scrolling
-  void _loadMoreMedias() {
-    if (_scrollController.position.pixels /
-            _scrollController.position.maxScrollExtent >
-        0.33) {
-      // Check if scrolled beyond 33% of the scroll extent
-      if (_currentPage != _lastPage) {
-        _loadMedias();
-      }
-    }
   }
 
   @override
@@ -90,11 +45,55 @@ class _PickerScreenState extends State<PickerScreen> {
     super.dispose();
   }
 
+  // Method to load albums asynchronously
+  void _loadAlbums() async {
+    // Fetch albums from service
+    List<AssetPathEntity> albums = await fetchAlbums();
+    if (albums.isNotEmpty) {
+      setState(() {
+        // Set the first album as the current album
+        _currentAlbum = albums.first;
+        // Update the list of albums
+        _albums = albums;
+      });
+      // Load media items for the current album
+      _loadMedias();
+    }
+  }
+
+  // Method to load media items asynchronously
+  void _loadMedias() async {
+    // Store the current page as the last page
+    _lastPage = _currentPage;
+    if (_currentAlbum != null) {
+      // Fetch media items for the current album
+      List<Media> medias =
+          await fetchMedias(album: _currentAlbum!, page: _currentPage);
+      setState(() {
+        // Add fetched media items to the list
+        _medias.addAll(medias);
+      });
+    }
+  }
+
+  // Method to load more media items when scrolling
+  void _loadMoreMedias() {
+    if (_scrollController.position.pixels /
+            _scrollController.position.maxScrollExtent >
+        0.33) {
+      // Check if scrolled beyond 33% of the scroll extent
+      if (_currentPage != _lastPage) {
+        // Load more media items
+        _loadMedias();
+      }
+    }
+  }
+
   // Method to select or deselect a media item
   void _selectMedia(Media media) {
-    bool isSelected = _selectedMedias
-        .any((element) => element.assetEntity.id == media.assetEntity.id);
-
+    bool isSelected = _selectedMedias.any((element) =>
+        element.assetEntity.id ==
+        media.assetEntity.id); // Check if the media item is already selected
     setState(() {
       if (isSelected) {
         // Deselect the media item if already selected
@@ -117,11 +116,13 @@ class _PickerScreenState extends State<PickerScreen> {
           items: _albums
               .map(
                 (e) => DropdownMenuItem<AssetPathEntity>(
+                  value: e,
+                  // Display album name in dropdown
                   child: Text(e.name.isEmpty ? "0" : e.name),
                 ),
               )
               .toList(),
-          onChanged: (value) {
+          onChanged: (AssetPathEntity? value) {
             setState(() {
               // Set the selected album as the current album
               _currentAlbum = value;
@@ -139,16 +140,24 @@ class _PickerScreenState extends State<PickerScreen> {
           },
         ),
       ),
-      body: MediaGridView(
+      body: MediasGridView(
+        // Pass the list of media items to the grid view
         medias: _medias,
+        // Pass the list of selected media items to the grid view
         selectedMedias: _selectedMedias,
+        // Pass the method to select or deselect a media item
         selectMedia: _selectMedia,
+        // Pass the scroll controller to the grid view
         scrollController: _scrollController,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pop(context, _selectedMedias),
-        child: const Icon(Icons.check_rounded),
-      ),
+      floatingActionButton: _selectedMedias.isEmpty
+          ? null
+          : FloatingActionButton(
+              // Close the screen and pass selected media items back
+              onPressed: () => Navigator.pop(context, _selectedMedias),
+              // Display check icon
+              child: const Icon(Icons.check_rounded),
+            ),
     );
   }
 }

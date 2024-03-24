@@ -12,6 +12,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      // Set HomeScreen as the home page of the MaterialApp
       home: HomeScreen(),
     );
   }

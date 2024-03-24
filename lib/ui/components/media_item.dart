@@ -2,19 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:media_picker/models/media.dart';
 import 'package:photo_manager/photo_manager.dart';
 
+// Widget to display a media item with optional selection overlay
 class MediaItem extends StatelessWidget {
+  // The media to display
   final Media media;
+  // Indicates whether the media is selected
   final bool isSelected;
+  // Callback function when the media is tapped
   final Function selectMedia;
-  const MediaItem(
-      {super.key,
-      required this.media,
-      required this.isSelected,
-      required this.selectMedia});
+
+  // Unique identifier for the widget, passes the key to the super constructor
+  const MediaItem({
+    required this.media,
+    required this.isSelected,
+    required this.selectMedia,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      // Callback function when the media is tapped
       onTap: () => selectMedia(media),
       child: Stack(
         children: [
@@ -30,7 +38,9 @@ class MediaItem extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Icon(
+                          // Checkmark icon
                           Icons.play_arrow_rounded,
+                          // White color for the icon
                           color: Colors.white,
                         ),
                       ),
@@ -50,6 +60,7 @@ class MediaItem extends StatelessWidget {
     return Positioned.fill(
       child: Padding(
         padding: EdgeInsets.all(isSelected ? 10.0 : 0.0),
+        // Display the media widget
         child: media.widget,
       ),
     );
@@ -63,8 +74,11 @@ class MediaItem extends StatelessWidget {
         color: Colors.black.withOpacity(0.1),
         child: const Center(
           child: Icon(
+            // Checkmark icon
             Icons.check_circle_rounded,
+            // White color for the icon
             color: Colors.white,
+            // Size of the icon
             size: 30,
           ),
         ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:media_picker/services/grant_permission.dart';
+import 'package:media_picker/services/grant_permissions.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 // Function to fetch albums while ensuring necessary permissions are granted
@@ -13,8 +13,9 @@ Future<List<AssetPathEntity>> fetchAlbums() async {
 
     return albums;
   } catch (e) {
-    // Handle any execeptions that occur during albums fetching
+    // Handle any exceptions that occur during album fetching
     debugPrint('Error fetching albums: $e');
+    // Return an empty list if an error occurs
     return [];
   }
 }
