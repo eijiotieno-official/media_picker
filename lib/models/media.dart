@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -8,9 +9,7 @@ class Media {
   // Represents a Flutter widget associated with the asset
   final Widget widget;
   Media({
-    // Initialize with a required AssetEntity
     required this.assetEntity,
-    // Initialize with a required Widget
     required this.widget,
   });
 }
