@@ -1,4 +1,5 @@
 # Custom Media Picker for Flutter
+[Watch Video](https://youtu.be/Y2A7NfiXJVQ)
 
 Welcome to the Custom Media Picker repository for Flutter applications! This
 repository offers a flexible and customizable media picker solution tailored to
